@@ -41,9 +41,6 @@ async function logError() {
   var description;
   var selectedRange = editor.selections.length;
   console.log(selectedRange);
-  //   var solution = editor.document.getText(editor.selections);
-
-  //   console.log(solution);
 
   await vscode.window
     .showInputBox({
@@ -63,11 +60,19 @@ async function logError() {
     })
     .then(() => {
       return vscode.window
-        .showInputBox({
-          prompt: "Enter Error Description",
-          value: "my_error_description",
-          placeHolder: "my_error_description",
-        })
+        .showInputBox(
+          {
+            prompt: "Enter Error Description",
+            value: "my_error_description",
+            placeHolder: "my_error_description",
+          },
+          {
+            onCancellationRequested: () => {
+              console.log("Cancelled");
+              return false;
+            },
+          }
+        )
         .then((value) => {
           if (!value) {
             description = "No description";
